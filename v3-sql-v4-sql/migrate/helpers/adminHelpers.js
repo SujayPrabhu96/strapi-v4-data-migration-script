@@ -58,6 +58,7 @@ async function migrateAdminPermissions() {
       subject: migrateSubject(item.subject),
       properties: migrateProperties(item.properties),
       conditions: JSON.stringify(item.conditions),
+      fields: [],
     }));
     const roleLinks = items.map((item) => ({
       permission_id: item.id,
