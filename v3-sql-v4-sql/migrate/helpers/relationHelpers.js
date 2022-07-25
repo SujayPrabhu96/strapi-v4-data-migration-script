@@ -177,8 +177,21 @@ async function migrateRelations(tables, relations) {
             `${relation.model}_${relation.attribute}__${relation.modelF}`
           ) ||
           (t.startsWith(`${relation.modelF}`) &&
-            t.endsWith(`__${relation.model}_${relation.attribute}`))
+            t.endsWith(`__${relation.model}_${relation.attribute}`)) ||
+          (t.startsWith(`${relation.model}_${relation.attribute}`) &&
+            t.endsWith(`__${relation.attribute}_${relation.model}`))
       );
+
+      if (relation.table === "wedding_packages_wedding_venues_links") {
+        sourceTable =
+          "wedding_packages_wedding_venues__wedding_venues_wedding_package";
+      }
+      if (
+        relation.table === "seasonal_policies_seasonal_policy_categories_links"
+      ) {
+        sourceTable =
+          "seasonal_policies_seasonal_policy_categories__seasonal_policy_c";
+      }
 
       if (sourceTable) {
         await migrateManyToManyRelation(relation, sourceTable);

@@ -84,8 +84,53 @@ async function migrateTables(tables) {
     );
 
     const componentDefinitionObject = JSON.parse(componentDefinition.value);
+    const cName = componentDefinitionObject.collectionName;
 
     const omitAttributes = [];
+
+    if (cName === "components_page_experiences") {
+      omitAttributes.push("description");
+    }
+
+    if (cName === "components_wedding_packages") {
+      omitAttributes.push(
+        "list_en",
+        "list_id",
+        "list_ja",
+        "list_ko",
+        "list_zh"
+      );
+      omitAttributes.push(
+        "subtitle_en",
+        "subtitle_id",
+        "subtitle_ja",
+        "subtitle_ko",
+        "subtitle_zh"
+      );
+    }
+
+    if (cName === "components_room_room_rates") {
+      omitAttributes.push("discount_rate");
+    }
+
+    if (cName === "components_stay_stay_preference_options") {
+      omitAttributes.push(
+        "name_en",
+        "name_id",
+        "name_ja",
+        "name_ko",
+        "name_zh"
+      );
+    }
+
+    if (cName === "components_page_image_cards") {
+      omitAttributes.push("ctaLink", "ctaText", "subtitle");
+    }
+
+    if (cName === "components_dates_date_ranges") {
+      omitAttributes.push("type");
+    }
+
     for (const [key, value] of Object.entries(
       componentDefinitionObject.attributes
     )) {
@@ -102,6 +147,15 @@ async function migrateTables(tables) {
           },
           relations
         );
+
+        // components_rate_override_normal_rates
+        if (cName === "components_rate_override_normal_rates") {
+          omitAttributes.push("rate");
+        }
+        // components_room_room_rates
+        if (cName === "components_room_room_rates") {
+          omitAttributes.push("room_type");
+        }
         omitAttributes.push(key);
       }
     }
